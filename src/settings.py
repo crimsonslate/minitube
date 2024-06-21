@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -22,6 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "django-insecure-vp3ctko+aha+yakj2r%87fuzb9u+&zw-1#^ln8pqhfug*0#*0u"
 
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -31,10 +33,30 @@ CLIENT = {
     "NAME": "Bryce Nall",
 }
 
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+    "bucket": {
+        "BACKEND": "storages.backends.s3.S3Storage",
+        "OPTIONS": {
+            "access_key": os.environ.get("AWS_ACCESS_KEY", ""),
+            "secret_key": os.environ.get("AWS_SECRET_KEY", ""),
+            "bucket_name": "brycenall-bucket",
+            "location": "media/",
+            "verify": False,
+        },
+    },
+}
+
 
 # Application definition
 
 INSTALLED_APPS = [
+    "minitube.apps.MinitubeConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -109,7 +131,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "America/Chicago"
 
 USE_I18N = True
 
