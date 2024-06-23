@@ -12,7 +12,10 @@ def validate_slug_is_unique(value: str) -> None:
     slug = slugify(value)
     all_medias = [subclass for subclass in Media.__subclasses__()]
     for media in all_medias:
-        if media.objects.filter(slug=slug).exists():
+        if (
+            media.objects.filter(slug=slug).exists()
+            and media.objects.filter(slug=slug).first().slug != value
+        ):
             raise ValidationError(_(f"'{value}' would generate a non-unique slug."))
 
 
@@ -48,6 +51,10 @@ class Media(models.Model):
     likes = models.PositiveBigIntegerField(default=0)
     dislikes = models.PositiveBigIntegerField(default=0)
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.slug = slugify(self.title)
+
     def __str__(self) -> str:
         return self.title
 
@@ -55,18 +62,9 @@ class Media(models.Model):
     def url(self) -> str:
         return self.source.url
 
-    def save(self, *args, **kwargs) -> None:
-        if not self.slug:
-            self.slug = slugify(self.title)
-        if self.__class__ == Media:
-            raise ValidationError(
-                _(":models:`minitube.Media` cannot be instantiated directly.")
-            )
-        super().save(*args, **kwargs)
-
 
 class Video(Media):
-    thumbnail = models.FileField(storage=storages["staticfiles"])
+    thumbnail = models.FileField(storage=storages["default"])
 
 
 class Photo(Media):

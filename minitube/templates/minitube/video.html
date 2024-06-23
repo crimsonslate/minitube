@@ -1,0 +1,11 @@
+{% extends "minitube/base.html" %}
+{% block content %}
+<div>
+    <h1 class="text-3xl text-grey-800 dark:text-gray-400">{{ video.title }}</h1>
+    <video class="w-full" controls>
+        <source src="{{ video.url }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <p>{{ video.caption }}</p>
+</div>
+{% endblock content %}
