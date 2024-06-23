@@ -48,16 +48,22 @@ class VideoModelTestCase(TestCase):
 
     def test_cannot_create_videos_with_similar_titles(self) -> None:
         """Succeeds if ValidationError is raised before a bad title could be written to the database."""
-        bad_test_source = generate_test_video_file()
-        bad_test_thumbnail = generate_test_thumbnail()
-        bad_test_video = Video.objects.create(
-            title="good slug",
-            caption="I would definitely break a database.",
-            source=bad_test_source,
-            thumbnail=bad_test_thumbnail,
+        source = generate_test_video_file()
+        thumbnail = generate_test_thumbnail()
+        test_video_1 = Video.objects.create(
+            title="Video Title",
+            caption="Video Caption",
+            source=source,
+            thumbnail=thumbnail,
+        )
+        test_video_2 = Video.objects.create(
+            title="New Video Title",
+            caption="Video Caption",
+            source=source,
+            thumbnail=thumbnail,
         )
         with self.assertRaisesMessage(
-            ValidationError, "'test video' would generate a non-unique slug."
+            ValidationError, "'video title!' would generate a non-unique slug."
         ):
-            bad_test_video.title = "test video"
-            bad_test_video.full_clean()
+            test_video_2.title = "video title!"
+            test_video_2.full_clean()
