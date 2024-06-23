@@ -30,7 +30,7 @@ class VideoModelTestCase(TestCase):
         )
 
     def test_video_automatically_creates_slug(self) -> None:
-        """Succeeds if the test video generates an accessible slug."""
+        """Succeeds if the test video generates a slug."""
         good_slug = slugify("Test Video")
 
         # Fails if the slug wasn't set at all
@@ -62,6 +62,8 @@ class VideoModelTestCase(TestCase):
             source=source,
             thumbnail=thumbnail,
         )
+
+        # Fails if ValidationError is not raised when trying to update a video to a bad title.
         with self.assertRaisesMessage(
             ValidationError, "'video title!' would generate a non-unique slug."
         ):
