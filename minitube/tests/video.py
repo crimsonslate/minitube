@@ -51,10 +51,13 @@ class VideoModelTestCase(TestCase):
         bad_test_source = generate_test_video_file()
         bad_test_thumbnail = generate_test_thumbnail()
         bad_test_video = Video.objects.create(
-            title="test video",
+            title="good slug",
             caption="I would definitely break a database.",
             source=bad_test_source,
             thumbnail=bad_test_thumbnail,
         )
-
-        self.assertRaises(ValidationError, bad_test_video.full_clean)
+        with self.assertRaisesMessage(
+            ValidationError, "'test video' would generate a non-unique slug."
+        ):
+            bad_test_video.title = "test video"
+            bad_test_video.full_clean()
