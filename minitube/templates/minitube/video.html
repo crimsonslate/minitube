@@ -7,5 +7,13 @@
         Your browser does not support the video tag.
     </video>
     <p>{{ video.caption }}</p>
+    {% if video.comments %}
+        {% for comment in video.comments %}
+            <div>
+                <h1>{{ comment.user.username }}: </h1>
+                <p>{{ comment.text }}</p>
+            </div>
+        {% endfor %}
+    {% endif %}
 </div>
 {% endblock content %}
