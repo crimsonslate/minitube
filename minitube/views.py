@@ -1,4 +1,4 @@
-from django.http import HttpRequest, HttpResponse, HttpResponseNotFound
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, render
 
 from .models import Photo, Video
@@ -32,7 +32,7 @@ def get_video_widget(request: HttpRequest, slug: str, widget_name: str) -> HttpR
         case "card":
             return render(request, "minitube/partials/video_card.html", context=context)
         case _:
-            return HttpResponse(code=404)
+            return HttpResponse(status=404)
 
 
 def get_photo_widget(request: HttpRequest, slug: str, widget_name: str) -> HttpResponse:
@@ -42,7 +42,7 @@ def get_photo_widget(request: HttpRequest, slug: str, widget_name: str) -> HttpR
         case "card":
             return render(request, "minitube/partials/photo_card.html", context=context)
         case _:
-            return HttpResponse(code=404)
+            return HttpResponse(status=404)
 
 
 def get_video(request: HttpRequest, slug: str) -> HttpResponse:

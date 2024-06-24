@@ -42,7 +42,7 @@ class VideoModelTestCase(TestCase):
         """Succeeds if the test video can be accessed via its slug."""
         good_slug = slugify("Test Video")
 
-        response = self.client.get(f"/{good_slug}/")
+        response = self.client.get(f"/video/{good_slug}/")
         # Fails if a client cannot access the video via slug
         self.assertEqual(response.status_code, 200)
 

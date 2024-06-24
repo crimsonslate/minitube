@@ -12,11 +12,9 @@ def validate_slug_is_unique(value: str) -> None:
     slug = slugify(value)
     all_medias = [subclass for subclass in Media.__subclasses__()]
     for media in all_medias:
-        if (
-            media.objects.filter(slug=slug).exists()
-            and media.objects.filter(slug=slug).first().slug != value
-        ):
-            raise ValidationError(_(f"'{value}' would generate a non-unique slug."))
+        if media.objects.filter(slug=slug).exists():
+            if media.objects.filter(slug=slug).first().title != value:
+                raise ValidationError(_(f"'{value}' would generate a non-unique slug."))
 
 
 class Comment(models.Model):
@@ -55,8 +53,7 @@ class Media(models.Model):
         super().__init__(*args, **kwargs)
 
     def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.title)
+        self.slug = slugify(self.title)
         super().save(*args, **kwargs)
 
     def __str__(self) -> str:

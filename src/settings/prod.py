@@ -3,11 +3,11 @@ from pathlib import Path
 
 ALLOWED_HOSTS = []
 BASE_DIR = Path(__file__).resolve().parent.parent
-DEBUG = True
+DEBUG = False
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LANGUAGE_CODE = "en-us"
 ROOT_URLCONF = "src.urls"
-SECRET_KEY = "django-insecure-vp3ctko+aha+yakj2r%87fuzb9u+&zw-1#^ln8pqhfug*0#*0u"
+SECRET_KEY = os.environ.get("MINITUBE_SECRET_KEY", "")
 STATIC_URL = "static/"
 TIME_ZONE = "America/Chicago"
 USE_I18N = True
